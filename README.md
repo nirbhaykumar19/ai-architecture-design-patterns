@@ -1,76 +1,87 @@
-# Enterprise AI Architecture & Design Patterns
+# AI Architecture & Design Patterns — runnable demos with Grok (xAI)
 
-A practical reference and implementation repository for designing
-production-ready Enterprise AI and Agentic AI systems.
+Minimal, dependency-light Python examples that demonstrate each pattern from the
+*AI Architecture & Design Patterns* deck, powered by **Grok** via the
+OpenAI-compatible xAI API.
 
-The repository brings together AI architecture patterns, orchestration
-patterns, reasoning approaches, collaboration patterns and enterprise
-design principles, supported by practical Python examples and architecture
-diagrams.
+## Project layout
 
-## What This Repository Covers
+```
+grok_patterns/
+├── docs/                         # sample private corpus used by the RAG demos
+│   ├── hr_policy.txt
+│   ├── refund_policy_eu.txt
+│   ├── refund_policy_uk.txt
+│   └── security_policy.txt
+├── common.py                     # shared Grok client (get_client, chat, ask)
+├── knowledge_base.py             # loads docs/ + lexical retrieve() for RAG
+├── tools.py                      # simulated enterprise tools for the ReAct demo
+├── 01_rag.py                     # Retrieval-Augmented Generation
+├── 02_agentic_rag.py            # agent decides when/what to retrieve (tool calls)
+├── 03_ai_gateway.py             # tiered model routing + cost ledger
+├── 04_workflow_sequential.py    # fixed step-by-step chain
+├── 05_workflow_parallel.py      # concurrent sub-tasks + aggregation
+├── 06_workflow_iterative.py     # draft → critique → improve loop
+├── 07_router_handoff.py         # classify intent → specialist agent
+├── 08_orchestrator_worker.py    # plan → delegate → synthesize
+├── 09_evaluator_optimizer.py    # generate → objective check → fix loop (SQL)
+├── 10_react_tool_use.py         # reason + act + observe with function calling
+├── 11_human_in_the_loop.py      # AI recommends, human approves before execute
+├── 12_multi_agent.py            # coordinator + specialist agents collaborate
+├── run_all.py                   # run every demo in order
+└── requirements.txt
+```
 
-### AI Architecture & Design Patterns
-- Retrieval-Augmented Generation (RAG)
-- Agentic RAG
-- AI Gateway
-- Single-Agent Systems
-- Multi-Agent Systems
-- Model Routing and Semantic Caching
+## Setup
 
-### Orchestration Patterns
+1. **Get an API key** at <https://console.x.ai>.
+2. **Set the key** as an environment variable:
 
-#### Workflow Orchestration
-- Sequential
-- Parallel / Concurrent
-- Iterative / Loop
+   ```powershell
+   # Windows PowerShell (open a NEW terminal afterwards)
+   setx XAI_API_KEY "xai-..."
+   ```
+   ```bash
+   # macOS / Linux
+   export XAI_API_KEY="xai-..."
+   ```
+3. **Install the dependency**:
 
-#### Dynamic Orchestration
-- Router / Handoff
-- Orchestrator-Worker
-- Hierarchical
-- Adaptive Planning
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-#### Collaboration & Validation
-- Group Chat
-- Review / Critic
-- Evaluator-Optimizer
+Optional model overrides:
 
-#### Reasoning
-- ReAct (Reason + Act + Observe)
+```bash
+set GROK_MODEL=grok-4            # default / frontier tier
+set GROK_CHEAP_MODEL=grok-3-mini # cheap tier for classify/route
+```
 
-#### Control & Governance
-- Human-in-the-Loop
+## Run
 
-## Enterprise AI Design Principles
+```bash
+python 01_rag.py          # run one pattern
+python run_all.py         # run them all in order
+```
 
-The implementations are guided by five groups of enterprise AI
-design principles:
+## Pattern → file map
 
-**Trust**
-Human-centered, grounded, transparent, explainable, fair and inclusive AI.
+| Pattern | File |
+|---|---|
+| RAG | `01_rag.py` |
+| Agentic RAG | `02_agentic_rag.py` |
+| AI Gateway | `03_ai_gateway.py` |
+| Sequential workflow | `04_workflow_sequential.py` |
+| Parallel / concurrent | `05_workflow_parallel.py` |
+| Iterative refinement | `06_workflow_iterative.py` |
+| Router / Handoff | `07_router_handoff.py` |
+| Orchestrator-Worker | `08_orchestrator_worker.py` |
+| Evaluator-Optimizer | `09_evaluator_optimizer.py` |
+| ReAct (tool use) | `10_react_tool_use.py` |
+| Human-in-the-Loop | `11_human_in_the_loop.py` |
+| Multi-agent collaboration | `12_multi_agent.py` |
 
-**Protect**
-Security and privacy by design, least privilege, and protection of
-enterprise data, prompts and tools.
-
-**Control**
-Bounded autonomy, guardrails, policies, human approval and runtime
-enforcement.
-
-**Operate**
-Observability, resilience, evaluation, tracing, fallback mechanisms
-and continuous monitoring.
-
-**Optimize**
-Cost and latency awareness, model flexibility, modularity and
-continuous evolution.
-
-## Goal
-
-The goal of this repository is to bridge the gap between AI architecture
-theory and implementation.
-
-Rather than treating AI patterns as isolated concepts, the examples show
-how architecture, orchestration, reasoning, governance and operational
-principles work together when designing enterprise AI systems.
+> The demos use a lexical retriever and in-memory data so they run without extra
+> services. In production, swap `knowledge_base.retrieve` for a vector search and
+> replace the simulated tools in `tools.py` with real APIs.

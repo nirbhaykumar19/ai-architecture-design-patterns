@@ -1,0 +1,3 @@
+Security policy: multi-factor authentication is mandatory for all production
+systems and for any access to customer data. Access reviews are performed
+quarterly and all privileged actions are logged and retained for 12 months.
